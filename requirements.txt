@@ -1,0 +1,6 @@
+fastapi
+httpx
+numpy
+pydantic
+requests
+
