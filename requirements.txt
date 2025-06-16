@@ -1,6 +1,8 @@
 fastapi
+uvicorn
 httpx
-numpy
-pydantic
 requests
+numpy
+python-dotenv
+pydantic
 

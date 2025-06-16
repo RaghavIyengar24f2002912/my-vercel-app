@@ -8,12 +8,11 @@ from pydantic import BaseModel
 from fastapi import FastAPI
 import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+load_dotenv()
 
-
-
-# Keys
-GEMINI_API_KEY = "AIzaSyDBh4pgfo95E8h2XKr82LqtQqd7TMq7hS0"
-API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjI0ZjIwMDI5MTJAZHMuc3R1ZHkuaWl0bS5hYy5pbiJ9.d3EQS-25nWGXSTjwhpP7q3bEiint3sFZd6a5OJ4039c"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+API_KEY = os.environ.get("API_KEY")
 
 app = FastAPI()
 app.add_middleware(
@@ -71,9 +70,7 @@ def embed(text: str) -> list[float]:
         print(f"Embedding failed: {e}")
         raise
 
-def load_embeddings(path="combined_embeddings.json"):
-    import json
-
+def load_embeddings(path=os.path.join(os.path.dirname(__file__), "combined_embeddings.json")):
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -217,4 +214,9 @@ async def api_answer(request: QuestionRequest):
         return answer(request.question, request.image)
     except Exception as e:
         return {"error": str(e)}
+
+@app.get("/")
+def root():
+    return {"status": "ok", "message": "TDS Virtual TA is running"}
+
 
